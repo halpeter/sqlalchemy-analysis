@@ -37,9 +37,11 @@ def welcome():
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/tobs<br/>"
-        f"/api/v1.0/&lt;start&gt;<br/>"
-        f"/api/v1.0/&lt;start&gt;/&lt;end&gt;"
+        f"/api/v1.0/[start_date format:yyyy-mm-dd]<br/>"
+        f"/api/v1.0/[start_date format:yyyy-mm-dd]/[end_date format:yyyy-mm-dd]"
     )
+
+ 
 
 @app.route("/api/v1.0/precipitation")
 def precipitation():
@@ -83,6 +85,7 @@ def stations():
 
 @app.route("/api/v1.0/tobs")
 def tobs():
+    # Create our session (link) from Python to the DB
     session = Session(engine)
     #Find the latest date and the date 1 year before that
     latest_date = session.query(Measurement.date).order_by(Measurement.date.desc()).first()
@@ -116,28 +119,54 @@ def tobs():
 
     
 
+@app.route("/api/v1.0/<start_date>")
+def start_date(start_date):
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+    #Query for the min temp, avg temp, max temp from a given start date
+    results = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
+        filter(Measurement.date >= start_date).all()
+    
+    session.close()
 
+    #Convert results into a dictionary
+    start_stats = []
+    for min, avg, max in results:
+        start_dict = {}
+        start_dict["Min Temp"] = min
+        start_dict["Avg Temp"] = avg
+        start_dict["Max Temp"] = max
+        start_stats.append(start_dict)
 
-
-@app.route("/api/v1.0/&lt;start&gt;")
-def start():
     #Return a JSON list of the minimum temperature, the average temperature, 
-    #and the max temperature for a given start or start-end range.
-    return(f"start date data")
-    #When given the start only, calculate `TMIN`, `TAVG`, and `TMAX` 
-    #for all dates greater than and equal to the start date.
+    #and the max temperature for a given start date
+    return jsonify(start_stats)
 
+    
 
+@app.route("/api/v1.0/<start_date>/<end_date>")
+def start_end(start_date, end_date):
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+    #Query for the min temp, avg temp, max temp from a given start date to a given end date
+    results = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
+        filter(Measurement.date >= start_date).\
+        filter(Measurement.date <= end_date).all()
 
+    session.close()
 
-@app.route("/api/v1.0/&lt;start&gt;/&lt;end&gt;")
-def start_end():
+    #Convert results into a dictionary
+    start_end_stats = []
+    for min, avg, max in results:
+        start_end_dict = {}
+        start_end_dict["Min Temp"] = min
+        start_end_dict["Avg Temp"] = avg
+        start_end_dict["Max Temp"] = max
+        start_end_stats.append(start_end_dict)
+
     #Return a JSON list of the minimum temperature, the average temperature, 
-    #and the max temperature for a given start or start-end range.
-    return(f"Data between start and end date")
-
-    #When given the start and the end date, calculate the `TMIN`, `TAVG`, 
-    #and `TMAX` for dates between the start and end date inclusive.
+    #and the max temperature for a given start and end date
+    return jsonify(start_end_stats)
 
 
 
