@@ -119,13 +119,13 @@ def tobs():
 
     
 
-@app.route("/api/v1.0/<start_date>")
-def start_date(start_date):
+@app.route("/api/v1.0/<start>")
+def start_date(start):
     # Create our session (link) from Python to the DB
     session = Session(engine)
     #Query for the min temp, avg temp, max temp from a given start date
-    results = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
-        filter(Measurement.date >= start_date).all()
+    results = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs),\
+        func.max(Measurement.tobs)).filter(Measurement.date >= start).all()
     
     session.close()
 
@@ -145,7 +145,7 @@ def start_date(start_date):
     
 
 @app.route("/api/v1.0/<start_date>/<end_date>")
-def start_end(start_date, end_date):
+def Start_end(start_date, end_date):
     # Create our session (link) from Python to the DB
     session = Session(engine)
     #Query for the min temp, avg temp, max temp from a given start date to a given end date
