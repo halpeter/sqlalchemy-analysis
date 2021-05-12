@@ -1,4 +1,4 @@
-# sqlalchemy-challenge
+# SQLAlchemy Analysis
 
 In this project, I will be analyzing the climate in Honolulu Hawaii. The following will detail what this analysis includes.
 
@@ -30,9 +30,9 @@ To begin, I used Python and SQLAlchemy to do basic climate analysis and data exp
 
 * I sorted the DataFrame values by `date`.
 
-* Finally, I ploted the results using the DataFrame `plot` method, creating a bar chart of the precipitation in Honolulu, Hawaii over the last 12 months of data. (This can be seen at precipitation_analysis.png)
+* Finally, I ploted the results using the DataFrame `plot` method, creating a bar chart of the precipitation in Honolulu, Hawaii over the last 12 months of data. (This can be seen [here](precipitation_analysis.png))
 
-* I used Pandas to print the summary statistics for the precipitation data. (This can be seen in the climate.ipynb file at the end of the Precipitation Analysis)
+* I used Pandas to print the summary statistics for the precipitation data. (This can be seen in the [climate.ipynb](climate.ipynb) file at the end of the Precipitation Analysis)
 
 ### Station Analysis
 
@@ -56,7 +56,7 @@ To begin, I used Python and SQLAlchemy to do basic climate analysis and data exp
 
 Finally, I made sure to close out my open session.
 
-(All Climate Analysis and Exploration code can be found at climate.ipynb)
+(All Climate Analysis and Exploration code can be found [here](climate.ipynb))
 
 - - -
 
@@ -97,4 +97,4 @@ Now that I have completed my initial analysis, I designed a Flask API based on t
 
   * When given the start and the end date, calculates the `TMIN`, `TAVG`, and `TMAX` for dates between the start and end date inclusive.
 
-(All Climate app code can be found in app.py)
+(All Climate app code can be found [here](app.py))
